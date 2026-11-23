@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Antrian Bank Sejahtera</title>
+  <meta name="description" content="Ambil nomor antrian dan pantau panggilan Teller atau Customer Service.">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+
+  <!-- Font: Barlow (teks) dan Barlow Condensed (angka antrian, gaya papan penunjuk) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 + Bootstrap Icons (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- CSS eksternal milik kita. Dimuat TERAKHIR agar bisa menimpa gaya bawaan Bootstrap -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<!-- data-page dipakai JavaScript untuk mengetahui sedang berada di halaman mana -->
+<body data-page="nasabah">
+
+  <a class="visually-hidden-focusable" href="#konten">Lewati ke konten utama</a>
+
+  <!-- ===================== HEADER + NAVBAR (HTML semantik: header, nav) ===================== -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark" aria-label="Navigasi utama">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          <img src="assets/images/logo.svg" width="30" height="30" alt="">
+          <span>Bank Sejahtera</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#menuUtama" aria-controls="menuUtama"
+                aria-expanded="false" aria-label="Buka menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuUtama">
+          <ul class="navbar-nav ms-auto align-items-md-center gap-md-2">
+            <li class="nav-item"><a class="nav-link" href="#ambil">Ambil nomor</a></li>
+            <li class="nav-item"><a class="nav-link" href="#daftar">Daftar antrian</a></li>
+            <li class="nav-item"><a class="nav-link" href="#cek">Cek nomor</a></li>
+            <li class="nav-item mt-2 mt-md-0">
+              <!-- Tombol menuju halaman petugas. Ditangani di app.js (muncul modal login) -->
+              <a href="#" class="btn btn-sm btn-admin js-kelola-admin">
+                <i class="bi bi-shield-lock" aria-hidden="true"></i> Kelola admin
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===================== KONTEN UTAMA (main) ===================== -->
+  <main id="konten" class="container">
+
+    <div class="judul-halaman">
+      <h1>Antrian layanan nasabah</h1>
+      <p class="text-soft mb-0">Ambil nomor, lalu pantau panggilan di layar ini.</p>
+    </div>
+
+    <!-- Baris 1: layar panggilan (kiri) dan pengambilan nomor (kanan).
+         Di HP, pengambilan nomor tampil lebih dulu (order-1) karena itu aksi utama nasabah. -->
+    <div class="row g-4 g-lg-5">
+
+      <!-- ---------- Layar panggilan ---------- -->
+      <div class="col-12 col-lg-7 order-2 order-lg-1">
+        <section id="displayPanel" class="panel-display" aria-labelledby="judulDisplay">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <h2 id="judulDisplay" class="display-judul">Sedang dipanggil</h2>
+            <!-- Toggle suara (Speech Synthesis), logikanya di display.js -->
+            <button type="button" id="btnSuara" class="btn btn-sm btn-ghost" aria-pressed="false">
+              <i class="bi bi-volume-mute" aria-hidden="true"></i> <span>Suara mati</span>
+            </button>
+          </div>
+
+          <div id="displayNomor" class="display-nomor" aria-live="polite">---</div>
+          <p id="displayKeterangan" class="display-ket">Belum ada panggilan</p>
+
+          <div class="display-bawah">
+            <div>
+              <p class="display-judul mb-1">Selesai terakhir</p>
+              <ul id="riwayatPanggilan" class="riwayat list-unstyled mb-0"></ul>
+            </div>
+            <div class="text-end">
+              <p class="display-judul mb-1">Waktu sekarang</p>
+              <div class="jam js-jam">--:--:--</div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ---------- Ambil nomor ---------- -->
+      <div class="col-12 col-lg-5 order-1 order-lg-2">
+        <section id="ambil" aria-labelledby="judulAmbil">
+          <h2 id="judulAmbil" class="judul-seksi">Ambil nomor</h2>
+          <p class="text-soft">Pilih layanan yang Anda butuhkan.</p>
+
+          <div class="d-grid gap-3 mb-3">
+            <!-- Dua tombol wajib: Teller dan Customer Service. data-layanan dibaca oleh queue.js -->
+            <button type="button" class="btn btn-brand btn-tiket btn-ambil" data-layanan="Teller">
+              <span class="tiket-huruf" aria-hidden="true">T</span>
+              <span class="tiket-teks">
+                <strong>Teller</strong>
+                <small>Setoran, penarikan, transfer</small>
+              </span>
+            </button>
+            <button type="button" class="btn btn-navy btn-tiket btn-ambil" data-layanan="Customer Service">
+              <span class="tiket-huruf" aria-hidden="true">C</span>
+              <span class="tiket-teks">
+                <strong>Customer Service</strong>
+                <small>Buka rekening, kartu, pengaduan</small>
+              </span>
+            </button>
+          </div>
+
+          <p id="infoLayanan" class="info-layanan" aria-live="polite">Estimasi tunggu dihitung 5 menit per nasabah.</p>
+
+          <div class="row g-0 ringkas">
+            <div class="col-6">
+              <span class="ringkas-angka js-jml-menunggu">0</span>
+              <span class="ringkas-label">Nasabah menunggu</span>
+            </div>
+            <div class="col-6">
+              <span class="ringkas-angka" id="estimasiBaru">-</span>
+              <span class="ringkas-label">Estimasi bila Anda ambil sekarang</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <hr class="pemisah">
+
+    <!-- Baris 2: daftar antrian (kiri) dan informasi tambahan (aside, kanan) -->
+    <div class="row g-4 g-lg-5">
+
+      <!-- ---------- Daftar antrian menunggu ---------- -->
+      <div class="col-12 col-lg-8">
+        <section id="daftar" aria-labelledby="judulDaftar">
+          <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-end gap-3 mb-3">
+            <div>
+              <h2 id="judulDaftar" class="judul-seksi mb-1">Antrian menunggu</h2>
+              <p class="text-soft mb-0">Diurutkan dari yang paling awal mengambil nomor.</p>
+            </div>
+            <!-- Filter berdasarkan jenis layanan (interaksi dinamis #1) -->
+            <div class="btn-group" role="group" aria-label="Filter jenis layanan">
+              <button type="button" class="btn btn-sm btn-outline-line btn-filter active" data-layanan="semua" aria-pressed="true">Semua</button>
+              <button type="button" class="btn btn-sm btn-outline-line btn-filter" data-layanan="Teller" aria-pressed="false">Teller</button>
+              <button type="button" class="btn btn-sm btn-outline-line btn-filter" data-layanan="Customer Service" aria-pressed="false">Customer Service</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table tabel-antrian align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">Nomor</th>
+                  <th scope="col">Layanan</th>
+                  <th scope="col" class="d-none d-sm-table-cell">Waktu ambil</th>
+                  <th scope="col" class="text-end">Estimasi tunggu</th>
+                </tr>
+              </thead>
+              <!-- Isi tabel dibuat oleh queue.js (fungsi renderTabel) -->
+              <tbody id="tbodyMenunggu"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ---------- Aside: cek nomor dan informasi ---------- -->
+      <aside class="col-12 col-lg-4 aside-info" aria-label="Informasi tambahan">
+        <section id="cek" aria-labelledby="judulCek" class="mb-4">
+          <h2 id="judulCek" class="judul-seksi">Cek nomor</h2>
+          <p class="text-soft">Masukkan nomor di tiket Anda untuk melihat statusnya.</p>
+
+          <!-- FORM dengan validasi: required, type, pattern + validasi jQuery -->
+          <form id="formCek" novalidate>
+            <label for="inputCek" class="form-label">Nomor antrian</label>
+            <div class="input-group has-validation">
+              <input type="text" id="inputCek" class="form-control" required
+                     maxlength="5" pattern="[TCtc]-?[0-9]{1,3}"
+                     placeholder="Contoh: T004" autocomplete="off">
+              <button type="submit" class="btn btn-brand">Cek status</button>
+              <div class="invalid-feedback"></div>
+            </div>
+          </form>
+          <div id="hasilCek" class="mt-3" aria-live="polite"></div>
+        </section>
+
+        <section aria-labelledby="judulInfo">
+          <h2 id="judulInfo" class="judul-seksi">Kode nomor</h2>
+          <dl class="info-daftar">
+            <dt>T</dt><dd>Teller</dd>
+            <dt>C</dt><dd>Customer Service</dd>
+          </dl>
+          <p class="text-soft mb-0">Layanan tersedia Senin sampai Jumat, pukul 08.00 sampai 15.00.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <p class="mb-0">&copy; <span class="js-tahun">2026</span> Bank Sejahtera. Proyek UAS Praktikum Pemrograman Web Dasar, Kelompok 7.</p>
+      <p class="mb-0">Petugas bank? <a href="#" class="js-kelola-admin">Kelola admin</a></p>
+    </div>
+  </footer>
+
+  <!-- ===================== MODAL: TIKET NOMOR ===================== -->
+  <div class="modal fade" id="modalTiket" tabindex="-1" aria-labelledby="judulTiket" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-header no-print">
+          <h2 class="modal-title fs-5" id="judulTiket">Nomor antrian Anda</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Area ini yang dicetak (lihat @media print di style.css) -->
+          <div id="areaCetak" class="tiket">
+            <p class="tiket-bank">Bank Sejahtera</p>
+            <div id="tiketNomor" class="tiket-nomor">A-000</div>
+            <p id="tiketLayanan" class="tiket-layanan">Teller</p>
+            <dl class="tiket-meta">
+              <dt>Waktu ambil</dt><dd id="tiketWaktu">-</dd>
+              <dt>Di depan Anda</dt><dd id="tiketDidepan">-</dd>
+              <dt>Estimasi tunggu</dt><dd id="tiketEstimasi">-</dd>
+            </dl>
+            <p class="tiket-catatan">Pantau layar panggilan. Mohon bersiap saat nomor Anda hampir tiba.</p>
+          </div>
+        </div>
+        <div class="modal-footer no-print">
+          <button type="button" class="btn btn-outline-line" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-brand" id="btnCetak">
+            <i class="bi bi-printer" aria-hidden="true"></i> Cetak tiket
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: LOGIN PETUGAS ===================== -->
+  <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="judulLogin" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="judulLogin">Masuk sebagai petugas</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+
+        <!-- novalidate: pesan error ditampilkan oleh jQuery (app.js), bukan oleh balon bawaan browser -->
+        <form id="formLogin" novalidate>
+          <div class="modal-body">
+            <div id="alertLogin"></div>
+
+            <div class="mb-3">
+              <label for="inputUsername" class="form-label">Username</label>
+              <input type="text" id="inputUsername" class="form-control" required minlength="3"
+                     autocomplete="username" placeholder="Masukkan username">
+              <div class="invalid-feedback"></div>
+            </div>
+
+            <div class="mb-2">
+              <label for="inputPassword" class="form-label">Password</label>
+              <input type="password" id="inputPassword" class="form-control" required minlength="6"
+                     autocomplete="current-password" placeholder="Masukkan password">
+              <div class="invalid-feedback"></div>
+            </div>
+            <p class="form-text mb-0">Akun demo: <strong>admin</strong> / <strong>admin123</strong></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-line" data-bs-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-brand">Masuk</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SCRIPT =====================
+       Urutan penting: jQuery -> Bootstrap -> app.js (fondasi) -> file halaman -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/queue.js"></script>
+  <script src="js/display.js"></script>
+</body>
+</html>
