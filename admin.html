@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel Petugas - Antrian Bank Sejahtera</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<!-- cek-auth: halaman disembunyikan sampai management.js memastikan petugas sudah login.
+     Kalau belum login, pengunjung langsung dialihkan ke index.html. -->
+<body data-page="admin" class="cek-auth">
+
+  <a class="visually-hidden-focusable" href="#konten">Lewati ke konten utama</a>
+
+  <header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark" aria-label="Navigasi petugas">
+      <div class="container">
+        <a class="navbar-brand" href="admin.html">
+          <img src="assets/images/logo.svg" width="30" height="30" alt="">
+          <span>Bank Sejahtera</span>
+          <span class="badge badge-peran">Petugas</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#menuAdmin" aria-controls="menuAdmin"
+                aria-expanded="false" aria-label="Buka menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menuAdmin">
+          <ul class="navbar-nav ms-auto align-items-md-center gap-md-2">
+            <li class="nav-item"><a class="nav-link" href="index.html">Layar nasabah</a></li>
+            <li class="nav-item mt-2 mt-md-0">
+              <button type="button" class="btn btn-sm btn-admin js-logout">
+                <i class="bi bi-box-arrow-right" aria-hidden="true"></i> Keluar
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="konten" class="container">
+
+    <div class="judul-halaman">
+      <h1>Panel petugas</h1>
+      <p class="text-soft mb-0">Panggil nasabah berikutnya dan selesaikan antrian yang sedang dilayani.</p>
+    </div>
+
+    <!-- Tempat pesan umpan balik (Bootstrap alert) -->
+    <div id="areaAlert" class="mb-3" aria-live="polite"></div>
+
+    <!-- Ringkasan angka. Nilainya diisi display.js lewat class js-jml-* -->
+    <section class="ringkasan" aria-label="Ringkasan antrian">
+      <div class="row g-0">
+        <div class="col-6 col-md-3 ringkasan-sel">
+          <span class="ringkasan-angka js-jml-total">0</span>
+          <span class="ringkasan-label">Total nomor diambil</span>
+        </div>
+        <div class="col-6 col-md-3 ringkasan-sel">
+          <span class="ringkasan-angka js-jml-menunggu">0</span>
+          <span class="ringkasan-label">Menunggu</span>
+        </div>
+        <div class="col-6 col-md-3 ringkasan-sel">
+          <span class="ringkasan-angka js-jml-dipanggil">0</span>
+          <span class="ringkasan-label">Sedang dilayani</span>
+        </div>
+        <div class="col-6 col-md-3 ringkasan-sel">
+          <span class="ringkasan-angka js-jml-selesai">0</span>
+          <span class="ringkasan-label">Selesai</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="row g-4 g-lg-5">
+
+      <!-- ---------- Kiri: kendali panggilan ---------- -->
+      <div class="col-12 col-lg-5">
+        <section id="displayPanel" class="panel-display panel-admin" aria-labelledby="judulDisplay">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <h2 id="judulDisplay" class="display-judul">Sedang dilayani</h2>
+            <button type="button" id="btnSuara" class="btn btn-sm btn-ghost" aria-pressed="false">
+              <i class="bi bi-volume-mute" aria-hidden="true"></i> <span>Suara mati</span>
+            </button>
+          </div>
+
+          <!-- Nomor yang sedang dipanggil akan diperbarui secara otomatis oleh JavaScript -->
+          <div id="displayNomor" class="display-nomor" aria-live="polite">---</div>
+          <p id="displayKeterangan" class="display-ket">Belum ada panggilan</p>
+
+          <div class="d-grid gap-2 mt-4">
+            <button type="button" id="btnPanggil" class="btn btn-brand btn-lg">
+              <i class="bi bi-megaphone" aria-hidden="true"></i> <span>Panggil berikutnya</span>
+            </button>
+            <div class="row g-2">
+              <div class="col-6">
+                <button type="button" id="btnUlang" class="btn btn-ghost w-100">
+                  <i class="bi bi-arrow-repeat" aria-hidden="true"></i> Panggil ulang
+                </button>
+              </div>
+              <div class="col-6">
+                <button type="button" id="btnSelesai" class="btn btn-gold w-100">
+                  <i class="bi bi-check2-circle" aria-hidden="true"></i> Selesai
+                </button>
+              </div>
+            </div>
+          </div>
+          <p id="infoPanggil" class="display-ket info-panggil"></p>
+
+          <div class="display-bawah">
+            <div>
+              <p class="display-judul mb-1">Selesai terakhir</p>
+              <!-- Riwayat panggilan ditampilkan berdasarkan data yang tersimpan -->
+              <ul id="riwayatPanggilan" class="riwayat list-unstyled mb-0"></ul>
+            </div>
+            <div class="text-end">
+              <p class="display-judul mb-1">Waktu sekarang</p>
+              <div class="jam js-jam">--:--:--</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Aside: pengaturan demo -->
+        <aside class="aside-info mt-4" aria-label="Pengaturan demo">
+          <h2 class="judul-seksi">Data demo</h2>
+          <p class="text-soft">Kembalikan antrian ke data awal sebelum presentasi atau pengujian ulang.</p>
+          <button type="button" class="btn btn-outline-line" data-bs-toggle="modal" data-bs-target="#modalReset">
+            <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Reset data
+          </button>
+        </aside>
+      </div>
+
+      <!-- ---------- Kanan: tabel pengelolaan antrian ---------- -->
+      <div class="col-12 col-lg-7">
+        <section aria-labelledby="judulKelola">
+          <h2 id="judulKelola" class="judul-seksi">Semua antrian</h2>
+          <p class="text-soft">Filter dan cari nomor. Tombol "Panggil berikutnya" mengikuti filter layanan yang dipilih.</p>
+
+          <!-- Kendali: cari, filter layanan, filter status, urutkan -->
+          <!-- Filter digunakan untuk menampilkan data sesuai pilihan petugas -->
+          <div class="row g-2 mb-3">
+            <div class="col-12 col-md-4">
+              <label for="cariNomor" class="visually-hidden">Cari nomor antrian</label>
+              <input type="search" id="cariNomor" class="form-control" placeholder="Cari nomor, misal T003" autocomplete="off">
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filterLayanan" class="visually-hidden">Filter layanan</label>
+              <select id="filterLayanan" class="form-select">
+                <option value="semua">Semua layanan</option>
+                <option value="Teller">Teller</option>
+                <option value="Customer Service">Customer Service</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-3">
+              <label for="filterStatus" class="visually-hidden">Filter status</label>
+              <select id="filterStatus" class="form-select">
+                <option value="semua">Semua status</option>
+                <option value="menunggu">Menunggu</option>
+                <option value="dipanggil">Dipanggil</option>
+                <option value="selesai">Selesai</option>
+              </select>
+            </div>
+            <div class="col-12 col-md-2">
+              <!-- Tombol untuk mengubah urutan data dari terlama atau terbaru -->
+              <button type="button" id="btnUrut" class="btn btn-outline-line w-100">
+                <i class="bi bi-sort-down" aria-hidden="true"></i> <span>Terlama</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table tabel-antrian align-middle">
+              <thead>
+                <tr>
+                  <th scope="col">Nomor</th>
+                  <th scope="col">Layanan</th>
+                  <th scope="col" class="d-none d-sm-table-cell">Waktu ambil</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-end">Aksi</th>
+                </tr>
+              </thead>
+              <!-- Isi tabel dibuat secara dinamis menggunakan JavaScript -->
+              <tbody id="tbodyKelola"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+      <p class="mb-0">&copy; <span class="js-tahun">2026</span> Bank Sejahtera. Proyek UAS Praktikum Pemrograman Web Dasar, Kelompok 7.</p>
+      <p class="mb-0"><a href="index.html">Kembali ke layar nasabah</a></p>
+    </div>
+  </footer>
+
+  <!-- ===================== MODAL: KONFIRMASI RESET ===================== -->
+  <div class="modal fade" id="modalReset" tabindex="-1" aria-labelledby="judulReset" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title fs-5" id="judulReset">Reset data antrian?</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-0">Semua nomor yang sudah diambil akan dihapus, lalu diganti dengan data contoh. Tindakan ini tidak bisa dibatalkan.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-line" data-bs-dismiss="modal">Batal</button>
+          <!-- Reset dijalankan setelah petugas menekan tombol konfirmasi -->
+          <button type="button" class="btn btn-brand" id="btnKonfirmReset">Ya, reset data</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript dihubungkan sesuai urutan fungsi masing-masing file -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/display.js"></script>
+  <script src="js/management.js"></script>
+</body>
+</html>

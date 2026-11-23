@@ -1,0 +1,200 @@
+:root {
+  --navy: #081C2D;
+  --green: #1F7A63;   
+  --bg: #F5F7FA;    
+  --muted: #9AA3A8;  
+  --gold: #DBA12C;  
+
+  --navy-2: #12304A; --green-dark: #17604D; --green-soft: #E2EFEA; --gold-soft: #F7EDD3;
+  --ink: var(--navy); --ink-soft: #4F5E6A; --line: #DDE2E7;
+
+  --font-teks: 'Barlow', system-ui, sans-serif;
+  --font-angka: 'Barlow Condensed', 'Barlow', system-ui, sans-serif;
+
+  /* Variabel Bootstrap ditimpa agar komponen Bootstrap ikut palet kita */
+  --bs-body-bg: var(--bg); --bs-body-color: var(--ink); --bs-heading-color: var(--ink);
+  --bs-body-font-family: var(--font-teks); --bs-body-font-size: 1.0625rem; --bs-border-color: var(--line);
+}
+
+/* Dasar */
+body { -webkit-font-smoothing: antialiased; }
+body.cek-auth { visibility: hidden; }   
+h1, h2, h3 { font-family: var(--font-angka); font-weight: 600; line-height: 1.15; letter-spacing: .01em; }
+a { color: var(--green-dark); }
+a:hover { color: var(--navy); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.text-soft { color: var(--ink-soft); }
+
+/* Navbar */
+.site-header { background: var(--navy); }
+.navbar-brand { display: flex; align-items: center; gap: .6rem; font-family: var(--font-angka); font-size: 1.45rem; font-weight: 600; }
+.navbar .nav-link { color: rgba(255, 255, 255, .78); }
+.navbar .nav-link:hover, .navbar .nav-link:focus { color: #fff; }
+.badge-peran { background: var(--gold); color: var(--navy); font-family: var(--font-teks); font-size: .75rem; font-weight: 600; }
+
+/* Struktur halaman */
+main { padding-block: 1.75rem 0; }
+.judul-halaman { margin-bottom: 1.5rem; }
+.judul-halaman h1 { font-size: 2rem; margin-bottom: .25rem; }
+.judul-seksi { font-size: 1.5rem; margin-bottom: .25rem; }
+.pemisah { margin-block: 2.5rem; border: 0; border-top: 1px solid var(--line); opacity: 1; }
+.aside-info { font-size: .98rem; }
+.info-daftar { display: grid; grid-template-columns: 2rem 1fr; gap: .25rem .5rem; margin-bottom: .75rem; }
+.info-daftar dt { font-family: var(--font-angka); font-size: 1.25rem; font-weight: 600; }
+.info-daftar dd { margin: 0; align-self: center; }
+
+/* Tombol */
+.btn { border-radius: 6px; font-weight: 500; }
+.btn-brand {   /* hijau: aksi utama */
+  --bs-btn-color: #fff; --bs-btn-bg: var(--green); --bs-btn-border-color: var(--green);
+  --bs-btn-hover-color: #fff; --bs-btn-hover-bg: var(--green-dark); --bs-btn-hover-border-color: var(--green-dark);
+  --bs-btn-active-color: #fff; --bs-btn-active-bg: var(--green-dark); --bs-btn-active-border-color: var(--green-dark);
+  --bs-btn-disabled-color: #fff; --bs-btn-disabled-bg: var(--green); --bs-btn-disabled-border-color: var(--green);
+}
+.btn-navy {    /* navy: Customer Service */
+  --bs-btn-color: #fff; --bs-btn-bg: var(--navy); --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-color: #fff; --bs-btn-hover-bg: var(--navy-2); --bs-btn-hover-border-color: var(--navy-2);
+  --bs-btn-active-color: #fff; --bs-btn-active-bg: var(--navy-2); --bs-btn-active-border-color: var(--navy-2);
+}
+.btn-gold {    /* tombol Selesai di panel gelap */
+  --bs-btn-color: var(--navy); --bs-btn-bg: var(--gold); --bs-btn-border-color: var(--gold);
+  --bs-btn-hover-color: var(--navy); --bs-btn-hover-bg: #E8B544; --bs-btn-hover-border-color: #E8B544;
+  --bs-btn-active-color: var(--navy); --bs-btn-active-bg: #E8B544; --bs-btn-active-border-color: #E8B544;
+  --bs-btn-disabled-color: var(--navy); --bs-btn-disabled-bg: var(--gold); --bs-btn-disabled-border-color: var(--gold);
+}
+.btn-outline-line {   /* garis tipis di latar terang: filter, batal, urutkan */
+  --bs-btn-color: var(--ink); --bs-btn-bg: #fff; --bs-btn-border-color: var(--line);
+  --bs-btn-hover-color: var(--ink); --bs-btn-hover-bg: var(--bg); --bs-btn-hover-border-color: var(--muted);
+  --bs-btn-active-color: #fff; --bs-btn-active-bg: var(--navy); --bs-btn-active-border-color: var(--navy);
+}
+.btn-ghost {   /* garis tipis di latar gelap: suara, panggil ulang */
+  --bs-btn-color: #fff; --bs-btn-bg: transparent; --bs-btn-border-color: rgba(255, 255, 255, .35);
+  --bs-btn-hover-color: #fff; --bs-btn-hover-bg: rgba(255, 255, 255, .1); --bs-btn-hover-border-color: rgba(255, 255, 255, .6);
+  --bs-btn-active-color: #fff; --bs-btn-active-bg: rgba(255, 255, 255, .16);
+  --bs-btn-disabled-color: rgba(255, 255, 255, .6); --bs-btn-disabled-border-color: rgba(255, 255, 255, .2);
+}
+.btn-ghost.aktif { background: var(--green); border-color: var(--green); }
+.btn-admin {  
+  --bs-btn-color: #fff; --bs-btn-bg: transparent; --bs-btn-border-color: rgba(255, 255, 255, .4);
+  --bs-btn-hover-color: var(--navy); --bs-btn-hover-bg: var(--gold); --bs-btn-hover-border-color: var(--gold);
+}
+
+/* Layar panggilan: satu-satunya blok gelap, nomor dibuat sangat besar */
+.panel-display { background: var(--navy); color: #fff; border-radius: 8px; padding: 1.5rem; height: 100%; display: flex; flex-direction: column; }
+.panel-admin { height: auto; }
+.display-judul { font-family: var(--font-teks); font-size: .95rem; font-weight: 500; letter-spacing: 0; color: var(--muted); margin: 0; }
+.display-nomor {
+  font-family: var(--font-angka); font-variant-numeric: tabular-nums; font-weight: 600;
+  font-size: clamp(5.5rem, 24vw, 10.5rem); line-height: .95;
+  color: var(--muted);             
+  margin: .75rem 0 .5rem;
+}
+.panel-admin .display-nomor { font-size: clamp(4.5rem, 18vw, 7rem); }
+.display-nomor.aktif { color: var(--gold); }   /* ada panggilan: emas */
+.display-nomor.berganti { animation: nomor-masuk .5s ease-out; }   /* animasi saat nomor berganti */
+@keyframes nomor-masuk { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.display-ket { color: rgba(255, 255, 255, .88); font-size: 1.15rem; margin: 0; }
+.info-panggil { font-size: .95rem; margin-top: 1rem; color: var(--muted); }
+.display-bawah {
+  margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(255, 255, 255, .14);
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem;
+}
+.riwayat { display: flex; gap: .5rem; padding: 0; }
+.riwayat li {
+  font-family: var(--font-angka); font-variant-numeric: tabular-nums; font-size: 1.2rem; font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, .28); border-radius: 4px; padding: 0 .55rem;
+  color: rgba(255, 255, 255, .9); white-space: nowrap;
+}
+.riwayat li.kosong { border-style: dashed; color: var(--muted); }
+.jam { font-family: var(--font-angka); font-variant-numeric: tabular-nums; font-size: 1.5rem; font-weight: 500; }
+
+/* Ambil nomor dan ringkasan angka */
+.btn-tiket { display: flex; align-items: center; gap: 1rem; text-align: left; padding: .85rem 1rem; border-radius: 8px; }
+.tiket-huruf {
+  display: grid; place-items: center; flex: none; width: 3.25rem; height: 3.25rem; border-radius: 6px;
+  background: rgba(255, 255, 255, .14); font-family: var(--font-angka); font-size: 2.1rem; font-weight: 600; line-height: 1;
+}
+.tiket-teks { display: flex; flex-direction: column; line-height: 1.25; }
+.tiket-teks strong { font-size: 1.2rem; font-weight: 600; }
+.tiket-teks small { font-size: .9rem; opacity: .85; }
+.info-layanan { min-height: 3rem; margin-bottom: 1rem; color: var(--ink-soft); font-size: .98rem; }   /* tinggi tetap agar layout tidak melompat */
+
+.ringkas { border-top: 1px solid var(--line); padding-top: 1rem; }
+.ringkas-angka, .ringkasan-angka { display: block; font-family: var(--font-angka); font-variant-numeric: tabular-nums; font-weight: 600; line-height: 1.1; }
+.ringkas-angka { font-size: 2rem; }
+.ringkasan-angka { font-size: 2.25rem; }
+.ringkas-label, .ringkasan-label { display: block; color: var(--ink-soft); font-size: .92rem; }
+.ringkas-label { padding-right: .75rem; }
+
+/* Ringkasan halaman petugas: satu jalur bersekat, bukan kartu terpisah */
+.ringkasan { border-block: 1px solid var(--line); margin-bottom: 2rem; }
+.ringkasan-sel { padding: .9rem 0; border-bottom: 1px solid var(--line); }
+.ringkasan-sel:nth-last-child(-n+2) { border-bottom: 0; }
+
+/* Tabel dan badge */
+.tabel-antrian { --bs-table-bg: transparent; margin: 0; }
+.tabel-antrian thead th { color: var(--ink-soft); font-size: .92rem; font-weight: 500; white-space: nowrap; border-bottom: 1px solid var(--muted); padding: .5rem; }
+.tabel-antrian td { padding: .7rem .5rem; border-color: var(--line); }
+.tabel-antrian tbody tr:hover > * { --bs-table-bg-state: #fff; }
+.tabel-antrian tbody tr.baris-saya > * { --bs-table-bg-state: var(--gold-soft); }   /* nomor milik nasabah ini */
+.penanda-saya { margin-left: .4rem; font-size: .8rem; font-weight: 600; }
+.nomor { font-family: var(--font-angka); font-variant-numeric: tabular-nums; font-size: 1.35rem; font-weight: 600; letter-spacing: .01em; white-space: nowrap; }
+
+.badge { font-weight: 500; font-size: .85rem; padding: .35em .65em; border-radius: 4px; }
+.badge-teller { background: var(--green-soft); color: var(--green-dark); }
+.badge-cs { background: #E1E7EC; color: var(--navy); }
+.badge-menunggu { background: #fff; color: var(--ink-soft); border: 1px solid var(--line); }
+.badge-dipanggil { background: var(--gold); color: var(--navy); }
+.badge-selesai { background: var(--green-soft); color: var(--green-dark); }
+
+/* Form, alert, modal */
+.form-control, .form-select { border-radius: 6px; border-color: var(--line); }
+.form-control:focus, .form-select:focus { border-color: var(--green); box-shadow: 0 0 0 .2rem rgba(31, 122, 99, .2); }
+.form-label { font-weight: 500; margin-bottom: .25rem; }
+.form-text { color: var(--ink-soft); }
+.alert { border-radius: 6px; }
+.modal-content { border: 0; border-radius: 10px; }
+.modal-header, .modal-footer { border-color: var(--line); }
+
+/* Tiket dan cetak */
+.tiket { border: 2px dashed var(--muted); border-radius: 8px; padding: 1.25rem 1rem; text-align: center; background: #fff; }
+.tiket-bank { margin: 0; color: var(--ink-soft); font-size: .95rem; }
+.tiket-nomor { font-family: var(--font-angka); font-variant-numeric: tabular-nums; font-size: 5rem; font-weight: 600; line-height: 1; margin: .25rem 0; }
+.tiket-layanan { font-weight: 600; font-size: 1.15rem; margin-bottom: 1rem; }
+.tiket-meta { display: grid; grid-template-columns: auto 1fr; gap: .25rem .75rem; text-align: left; font-size: .95rem; margin-bottom: 1rem; }
+.tiket-meta dt { font-weight: 400; color: var(--ink-soft); }
+.tiket-meta dd { margin: 0; text-align: right; font-weight: 500; }
+.tiket-catatan { margin: 0; font-size: .85rem; color: var(--ink-soft); }
+
+/* Saat dicetak hanya tiket yang keluar: semua anak <body> disembunyikan kecuali modal tiket */
+@media print {
+  body > *:not(#modalTiket) { display: none !important; }
+  #modalTiket { position: static; display: block !important; }
+  #modalTiket .modal-dialog { margin: 0 auto; max-width: 80mm; transform: none; }
+  #modalTiket .no-print { display: none !important; }
+  .tiket { border-color: #000; }
+}
+
+.site-footer { background: var(--navy); color: rgba(255, 255, 255, .78); margin-top: 3.5rem; padding-block: 1.5rem; font-size: .95rem; }
+.site-footer a { color: var(--gold); }
+.site-footer a:hover { color: #fff; }
+
+/* gaya dasar untuk HP (375px) */
+@media (max-width: 575.98px) {   
+  .tabel-antrian td, .tabel-antrian thead th { padding-inline: .3rem; }
+  .tabel-antrian .badge { font-size: .78rem; }
+  .tabel-antrian .nomor { font-size: 1.2rem; }
+}
+@media (min-width: 768px) {
+  main { padding-block: 2.5rem 0; }
+  .panel-display { padding: 2rem; }
+  .ringkasan-sel { padding: 1rem 1.5rem; border-bottom: 0 !important; }
+  .ringkasan-sel:first-child { padding-left: 0; }
+  .ringkasan-sel + .ringkasan-sel { border-left: 1px solid var(--line); }
+}
+@media (min-width: 992px) {
+  .judul-halaman h1 { font-size: 2.4rem; }
+  .aside-info { border-left: 1px solid var(--line); padding-left: 2rem; }
+  .col-lg-5 > .aside-info { border-left: 0; padding-left: 0; }  
+}
+@media (prefers-reduced-motion: reduce) { .display-nomor.berganti { animation: none; } }
