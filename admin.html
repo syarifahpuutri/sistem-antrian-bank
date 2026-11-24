@@ -15,8 +15,6 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<!-- cek-auth: halaman disembunyikan sampai management.js memastikan petugas sudah login.
-     Kalau belum login, pengunjung langsung dialihkan ke index.html. -->
 <body data-page="admin" class="cek-auth">
 
   <a class="visually-hidden-focusable" href="#konten">Lewati ke konten utama</a>
@@ -55,10 +53,8 @@
       <p class="text-soft mb-0">Panggil nasabah berikutnya dan selesaikan antrian yang sedang dilayani.</p>
     </div>
 
-    <!-- Tempat pesan umpan balik (Bootstrap alert) -->
     <div id="areaAlert" class="mb-3" aria-live="polite"></div>
 
-    <!-- Ringkasan angka. Nilainya diisi display.js lewat class js-jml-* -->
     <section class="ringkasan" aria-label="Ringkasan antrian">
       <div class="row g-0">
         <div class="col-6 col-md-3 ringkasan-sel">
@@ -82,7 +78,6 @@
 
     <div class="row g-4 g-lg-5">
 
-      <!-- ---------- Kiri: kendali panggilan ---------- -->
       <div class="col-12 col-lg-5">
         <section id="displayPanel" class="panel-display panel-admin" aria-labelledby="judulDisplay">
           <div class="d-flex justify-content-between align-items-start gap-2">
@@ -92,7 +87,6 @@
             </button>
           </div>
 
-          <!-- Nomor yang sedang dipanggil akan diperbarui secara otomatis oleh JavaScript -->
           <div id="displayNomor" class="display-nomor" aria-live="polite">---</div>
           <p id="displayKeterangan" class="display-ket">Belum ada panggilan</p>
 
@@ -118,7 +112,6 @@
           <div class="display-bawah">
             <div>
               <p class="display-judul mb-1">Selesai terakhir</p>
-              <!-- Riwayat panggilan ditampilkan berdasarkan data yang tersimpan -->
               <ul id="riwayatPanggilan" class="riwayat list-unstyled mb-0"></ul>
             </div>
             <div class="text-end">
@@ -128,7 +121,6 @@
           </div>
         </section>
 
-        <!-- Aside: pengaturan demo -->
         <aside class="aside-info mt-4" aria-label="Pengaturan demo">
           <h2 class="judul-seksi">Data demo</h2>
           <p class="text-soft">Kembalikan antrian ke data awal sebelum presentasi atau pengujian ulang.</p>
@@ -144,8 +136,6 @@
           <h2 id="judulKelola" class="judul-seksi">Semua antrian</h2>
           <p class="text-soft">Filter dan cari nomor. Tombol "Panggil berikutnya" mengikuti filter layanan yang dipilih.</p>
 
-          <!-- Kendali: cari, filter layanan, filter status, urutkan -->
-          <!-- Filter digunakan untuk menampilkan data sesuai pilihan petugas -->
           <div class="row g-2 mb-3">
             <div class="col-12 col-md-4">
               <label for="cariNomor" class="visually-hidden">Cari nomor antrian</label>
@@ -169,7 +159,6 @@
               </select>
             </div>
             <div class="col-12 col-md-2">
-              <!-- Tombol untuk mengubah urutan data dari terlama atau terbaru -->
               <button type="button" id="btnUrut" class="btn btn-outline-line w-100">
                 <i class="bi bi-sort-down" aria-hidden="true"></i> <span>Terlama</span>
               </button>
@@ -187,7 +176,6 @@
                   <th scope="col" class="text-end">Aksi</th>
                 </tr>
               </thead>
-              <!-- Isi tabel dibuat secara dinamis menggunakan JavaScript -->
               <tbody id="tbodyKelola"></tbody>
             </table>
           </div>
@@ -216,14 +204,12 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-line" data-bs-dismiss="modal">Batal</button>
-          <!-- Reset dijalankan setelah petugas menekan tombol konfirmasi -->
           <button type="button" class="btn btn-brand" id="btnKonfirmReset">Ya, reset data</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript dihubungkan sesuai urutan fungsi masing-masing file -->
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="js/app.js"></script>
